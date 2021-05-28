@@ -5,6 +5,8 @@
 [W1-2_PHPでWebページを出力しよう](#W1-2_PHPでWebページを出力しよう)</br>
 [W1-3_URLとプログラムの関係を理解しよう](#W1-3_URLとプログラムの関係を理解しよう)</br>
 [W1-4_テンプレートを表示しよう](#W1-4_テンプレートを表示しよう)</br>
+[W1-5_テンプレートでデータを利用しよう](#W1-5_テンプレートでデータを利用しよう)</br>
+[W1-6_RPGの戦闘シーンを表現しよう](#W1-6_RPGの戦闘シーンを表現しよう)</br>
 
 ***
 
@@ -117,4 +119,60 @@ views$ touch content.tpl.php
 hello PHP
 Hello template
 ```
-↑のようにindex1-4.phpとcontent.tpl.phpの内容が両方表示される。
+↑のようにindex1-4.phpとcontent.tpl.phpの内容が両方表示される。</br>
+</br>
+
+***
+
+### W1-5_テンプレートでデータを利用しよう
+複数のファイルで共通のデータを利用してみる。</br>
+今回はPHPの変数をテンプレートで表示してみる。</br>
+まず、index1-5.phpを下記のように編集。
+```php
+<?php
+echo "<h1>hello PHP</h1>";
+$name = 'mogura';   //phpの変数を追記
+require_once 'views/content.tpl_1-5.php';
+```
+続いてテンプレートファイル'views/content.tpl_1-5.php'を編集。
+```php
+<!DOCTYPE html>
+<html lang='ja'>
+
+  <head>
+    <meta charset='utf-8'>
+    <title>PHP-WEB app</title>
+    <style>body {padding; 10px;}</style>
+  </head>
+
+  <body>
+    <h1>Hello template</h1>
+    <p>This is <?php echo $name;?></p>  //先程追記した変数を表示するように記述
+
+  </body>
+
+</html>
+```
+↓出力結果
+```
+hello PHP
+Hello template
+This is mogura
+```
+</br>
+また、`echo`の記述を下記のように省略できる。
+```php
+<p>This is <?php echo $name;?></p>
+↓
+<p>This is <?= $name ?></p>
+```
+</br>
+このようにテンプレート側で変数を読み込み、表示する事ができる。</br>
+ただし、定義されてない変数を呼び出そうとするとエラーになる。</br>
+</br>
+
+***
+
+### W1-6_RPGの戦闘シーンを表現しよう
+PHPでテンプレートを使う具体例としてRPGの戦闘シーンを表現してみる。</br>
+<span style="color: #008080; ">コード側で用意した配列を、テンプレート側でループさせて出力する。</span></br>
