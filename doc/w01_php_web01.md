@@ -162,7 +162,9 @@ This is mogura
 </br>
 
 また、`echo`の記述を下記のように省略できる。
+
 ```php
+<?php
 <p>This is <?php echo $name;?></p>
 ↓
 <p>This is <?= $name ?></p>
