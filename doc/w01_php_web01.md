@@ -160,6 +160,7 @@ Hello template
 This is mogura
 ```
 </br>
+
 また、`echo`の記述を下記のように省略できる。
 ```php
 <p>This is <?php echo $name;?></p>
