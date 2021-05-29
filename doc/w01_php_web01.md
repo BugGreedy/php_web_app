@@ -8,7 +8,8 @@
 [W1-5_テンプレートでデータを利用しよう](#W1-5_テンプレートでデータを利用しよう)</br>
 [W1-6_RPGの戦闘シーンを表現しよう](#W1-6_RPGの戦闘シーンを表現しよう)</br>
 [W1-7_テンプレートの共通部分を分割しよう](#W1-7_テンプレートの共通部分を分割しよう)</br>
-[1-8_RPGの行動選択メニューを作ろう1](#1-8_RPGの行動選択メニューを作ろう1)</br>
+[W1-8_RPGの行動選択メニューを作ろう1](#W1-8_RPGの行動選択メニューを作ろう1)</br>
+[W1-9_RPGの行動選択メニューを作ろう2](#W1-9_RPGの行動選択メニューを作ろう2)</br>
 </br>
 ***
 
@@ -283,7 +284,7 @@ require_once 'views/content.tpl_1-7.php';
  ***
 
 
-### 1-8_RPGの行動選択メニューを作ろう1
+### W1-8_RPGの行動選択メニューを作ろう1
 まずpublic_htmlに新しくファイルを追加(player_menu.phpとviews/menu.tpl_1-8.php)</br>
 それぞれを下記のように編集
 ```php
@@ -304,12 +305,69 @@ require_once 'views/content.tpl_1-7.php';
   </body>
 </html>
 ```
-↓出力結果
+↓出力結果<http://localhost:8888/php_web_app/public_html/player_menu1-8.php/>
 ```
-[表示](http://localhost:8888/php_web_app/public_html/player_menu1-8.php/)
 勇者のメニュー
 あるく
 たたかう
 by paiza
-
 ```
+</br>
+
+***
+
+### W1-9_RPGの行動選択メニューを作ろう2
+前章で作った行動選択メニューに対応したファイルを作っていく。</br>
+まず`walk.php`と`attack.php`を作成する。またそれらのテンプレートである`action.tpl_1-9.php`も作成する。</br>
+それぞれを下記のように編集
+```php
+// player_menu1-8.php 今回はここは触らない
+<?php
+  $player = '勇者';
+  require_once 'views/menu.tpl_1-8.php';
+
+// walk1-9.php
+<?php
+  $player = '勇者';
+  $message = $player.'は荒野を歩いていた';
+  require_once 'views/action.tpl_1-9.php';
+
+// attack.php (wall1-9.phpをコピーして作成)
+<?php
+$player = '勇者';
+$message = $player . 'は亡者と戦った';
+require_once 'views/action.tpl_1-9.php';
+
+// action.tpl_1-9.php
+<!DOCTYPE html>
+<html lang='ja'>
+<?php include('header.inc_1-7.php'); ?>
+
+<body>
+  <h1><?= $player . 'のアクション' ?></h1>
+  <p><?= $message ?></p>
+  <p><a href='player_menu1-8.php'>もどる</a></p>
+  <?php include('footer.inc_1-7.php'); ?>
+</body>
+
+</html>
+```
+↓出力結果</br>
+```php
+// (あるくをクリックした場合)
+勇者のアクション
+勇者は荒野を歩いていた
+
+もどる
+
+by paiza
+
+// (たたかうをクリックした場合)
+勇者のアクション
+勇者は亡者と戦った
+
+もどる
+
+by paiza
+```
+
