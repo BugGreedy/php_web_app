@@ -7,7 +7,9 @@
 [W1-4_テンプレートを表示しよう](#W1-4_テンプレートを表示しよう)</br>
 [W1-5_テンプレートでデータを利用しよう](#W1-5_テンプレートでデータを利用しよう)</br>
 [W1-6_RPGの戦闘シーンを表現しよう](#W1-6_RPGの戦闘シーンを表現しよう)</br>
-
+[W1-7_テンプレートの共通部分を分割しよう](#W1-7_テンプレートの共通部分を分割しよう)</br>
+[1-8_RPGの行動選択メニューを作ろう1](#1-8_RPGの行動選択メニューを作ろう1)</br>
+</br>
 ***
 
 ### W1-1_Webアプリの初歩を理解しよう
@@ -35,18 +37,18 @@
 今回は2つのファイルを作成して違う内容を表示してみる。</br>
 
 ```bash
-$ cp index.php index2.php
+$ cp index1-3-1.php index1-3-2.php
 # コピー コピー元のファイル コピー先のファイル
 ```
 これでファイルを複製し、出力する内容を変更する。</br>
 ```php
-// index.php
+// index1-3-1.php
 <?php
 // Open https://localhost/~ubuntu/index.php
 echo '<h1>Hello ' . 'PHP</h1>';
 echo '<p>世界の皆さん、こんにちは</p>';
 
-//index2.php
+//index1-3-2.php
 <?php
 // Open https://localhost/~ubuntu/index.php
 echo '<h1>Hello ' . 'PHP</h1>';
@@ -178,4 +180,136 @@ This is mogura
 
 ### W1-6_RPGの戦闘シーンを表現しよう
 PHPでテンプレートを使う具体例としてRPGの戦闘シーンを表現してみる。</br>
-<span style="color: red; ">コード側で用意した配列を、テンプレート側でループさせて出力する。</span></br>
+コード側で用意した配列を、テンプレート側でループさせて出力する。</br>
+phpファイルとテンプレートとファイルを下記のように編集。
+```php
+// index1-6.php
+<?php
+<?php
+  $name = 'paiza';
+  $message = '世界の皆さん、こんにちは';
+  $players = ['呪術師','聖職者','持たざるもの']; // 配列を追記
+  require_once 'views/content.tpl_1-6.php';
+
+// テンプレートファイル content.tpl_1-6.php
+<!DOCTYPE html>
+<html lang='ja'>
+
+<head>
+  <meta charset='utf-8'>
+  <title>PHP-Web - paiza</title>
+  <style>
+    body {
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Hello templates</h1>
+  <p>This is <?= $name ?></p>
+  <p><?= $message ?></p>
+  <?php foreach($players as $player){ ?>     //ここに配列を読み込む記述を追記
+     <p><?= $player ?>はデーモンと戦った</p>
+  <?php } ?>
+</body>
+
+</html>
+```
+↓出力結果
+```
+Hello templates
+This is paiza
+
+世界の皆さん、こんにちは
+
+呪術師はデーモンと戦った
+
+聖職者はデーモンと戦った
+
+持たざるものはデーモンと戦った
+```
+</br>
+
+ ***
+
+ ### W1-7_テンプレートの共通部分を分割しよう
+ PHPのinclude命令を使って、ヘッダーやフッターなどの各ページ共通のテンプレートを設置する。
+ ```php
+ // index1-7.php  今回はここは触らない
+ <?php
+$name = 'paiza';
+$message = '世界の皆さん、こんにちは';
+$players = ['呪術師', '聖職者', '持たざるもの'];
+require_once 'views/content.tpl_1-7.php';
+
+//  content.tpl_1-7.php  header要素とfooter要素を削除してincludeに置き換える。
+<!DOCTYPE html>
+<html lang='ja'>
+<?php include('header.inc_1-7.php'); ?>  //<head>...</head>部分をincludeで読み込む
+<body>
+  <h1>Hello templates</h1>
+  <p>This is <?= $name ?></p>
+  <p><?= $message ?></p>
+  <?php foreach ($players as $player) { ?>
+    <p><?= $player ?>はデーモンと戦った</p>
+  <?php } ?>
+   <?php include('footer.inc_1-7.php'); ?>  //<footer>...</footer>部分をincludeで読み込む
+</body>
+
+</html>
+
+// header.inc_1-7.php テンプレートファイルのhead要素のみ抜き出す
+<head>
+  <meta charset='utf-8'>
+  <title>PHP-Web - paiza</title>
+  <style>
+    body {
+      padding: 10px;
+    }
+  </style>
+</head>
+
+
+// footer.inc_1-7.php テンプレートのfooter要素のみ抜き出す
+<hr>
+<footer>by paiza</footer>
+<hr>
+```
+また、headerやfooterなどの部分テンプレートは通常のテンプレートと区別するために</br>
+`部分名.inc.php`とする。incはincludeの略。</br>
+</br>
+
+ ***
+
+
+### 1-8_RPGの行動選択メニューを作ろう1
+まずpublic_htmlに新しくファイルを追加(player_menu.phpとviews/menu.tpl_1-8.php)</br>
+それぞれを下記のように編集
+```php
+// player_menu.php
+<?php
+  $player = '勇者';
+  require_once 'views/menu.tpl_1-8.php';
+
+// menu.tpl_1-8.php
+<!DOCTYPE html>
+<html lang='ja'>
+  <?php include('header.inc_1-7.php');?>
+  <body>
+    <h1><?= $player.'のメニュー' ?></h1>
+    <p><a href='walk.php'>あるく</a></p>
+    <p><a href='attack.php'>たたかう</a></p>
+    <?php include('footer.inc_1-7.php'); ?>
+  </body>
+</html>
+```
+↓出力結果
+```
+[表示](http://localhost:8888/php_web_app/public_html/player_menu1-8.php/)
+勇者のメニュー
+あるく
+たたかう
+by paiza
+
+```
