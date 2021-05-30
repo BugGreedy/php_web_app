@@ -138,7 +138,7 @@ hello,paiza
 
 by paiza
 ```
-**htmlspecialchars($_request['変数名'])**でフォーム入力から受け取ったデータを表示できる。</br>
+**`htmlspecialchars($_request['変数名'])`**でフォーム入力から受け取ったデータを表示できる。</br>
 </br>
 
 ***
