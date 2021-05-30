@@ -1,7 +1,7 @@
 <?php
   $message = 'This is paiza';
 
-  $article = '投稿';
-  $name = '名前';
+  $article = htmlspecialchars($_REQUEST['article']);
+  $name = htmlspecialchars($_REQUEST['name']);
 
   require_once 'views/form.tpl.php';

@@ -17,6 +17,17 @@
     <button type='submit'>送信するンゴ</button>
   </form>
 
+  <p>
+    <?php
+      if(isset($article)){
+        echo $article.',';
+      }
+      if(isset($name)){
+        echo $name;
+      }
+    ?>
+  </p>
+
   <?php include('footer.inc.php'); ?>
 </body>
 
