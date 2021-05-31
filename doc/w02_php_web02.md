@@ -379,3 +379,27 @@ by paiza
 ```
 
 ### W2-8_1行掲示板を作ろう-投稿をファイルに保存する
+ファイルを書き込むコードをresult.phpに記述する。
+```php
+<?php
+$message = 'ここはresult.php';
+
+$article = htmlspecialchars($_REQUEST['article']);
+$name = htmlspecialchars($_REQUEST['name']);
+
+//下記を追記
+$line = $article . ',' .$name . PHP_EOL;
+file_put_contents(__DIR__.'/articles.txt',$line, FILE_APPEND | LOCK_EX);
+
+require_once 'views/result.tpl.php';
+```
+`$line = $article . ',' .$name . PHP_EOL;`について
+- `$line = $article . ',' .$name `は通常の代入。
+- `PHP_EOL`は改行を表す定数。この代入の末尾に改行を付け加えている。</br>
+</br>
+
+`file_put_contents(__DIR__.'/articles.txt',$line, FILE_APPEND | LOCK_EX);`について
+- `file_put_contents()`はファイルに書き込むという関数。
+- `, FILE_APPEND`はファイルの末尾にデータを追記するというオプション。
+- `| LOCK_EX`は書き込み中に他のアクセスをロックするというオプション。書き込み中に他のアクセスがあるとファイルの破損が起きる可能性がある。そのため書き込み中は他のアクセスを遮断(ファイルをロック)する必要がある。</br>
+</br>
