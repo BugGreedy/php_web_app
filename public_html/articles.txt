@@ -1,0 +1,4 @@
+Hello World,paiza
+hello PHP,paiza
+世界の皆さんこんにちは,猫
+ぶるるる,ぶるぶる
