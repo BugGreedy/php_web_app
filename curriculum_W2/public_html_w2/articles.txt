@@ -2,3 +2,5 @@ Hello World,paiza
 hello PHP,paiza
 世界の皆さんこんにちは,猫
 ぶるるる,ぶるぶる
+投稿,名前
+aaa,aaa

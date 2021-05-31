@@ -403,3 +403,40 @@ require_once 'views/result.tpl.php';
 - `, FILE_APPEND`はファイルの末尾にデータを追記するというオプション。
 - `| LOCK_EX`は書き込み中に他のアクセスをロックするというオプション。書き込み中に他のアクセスがあるとファイルの破損が起きる可能性がある。そのため書き込み中は他のアクセスを遮断(ファイルをロック)する必要がある。</br>
 </br>
+
+ここで一度書き込みを実行してみる。しかし、bbs.phpにおける表示に反映されない。</br>
+これはファイルへの書き込み権限(パーミット)がないからである。</br>
+ターミナルで下記を実行しファイルの書き込み権限を変更する。
+
+```bash
+$ cd public_html
+public_html $ ls -l
+
+total 16
+-rw-rw-r-- 1 ubuntu ubuntu  108 May 31 01:33 articles.txt
+-rw-rw-r-- 1 ubuntu ubuntu  146 May 31 01:34 bbs.php
+-rw-rw-r-- 1 ubuntu ubuntu  312 May 31 01:33 result.php
+drwxrwxr-x 2 ubuntu ubuntu 4096 May 31 01:33 views
+```
+上のように表示されるので下記を入力
+```bash
+public_html $ chmod -v a+w articles.php
+
+mode of 'articles.txt' changed from 0664 (rw-rw-r--) to 0666 (rw-rw-rw-)
+```
+再度ls -lを実行
+```bash
+
+-rw-rw-rw- 1 ubuntu ubuntu  108 May 31 01:33 articles.txt
+-rw-rw-r-- 1 ubuntu ubuntu  146 May 31 01:34 bbs.php
+-rw-rw-r-- 1 ubuntu ubuntu  312 May 31 01:33 result.php
+drwxrwxr-x 2 ubuntu ubuntu 4096 May 31 01:33 views
+```
+`articles.txt`の表示が全てrwになったので書き込みが誰でもできるようになった。</br>
+</br>
+
+`$ chmod -v a+w articles.php`について</br>
+- `chmod -v`→チェンジモード:権限を変更する
+- `a+w`→a：全てに、+：追加する、w：書き込み権限</br>
+</br>
+上記を実行する事でファイルに書き込みが行えるようになる。
