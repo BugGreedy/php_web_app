@@ -43,7 +43,9 @@ while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {  //DBに問い合わせた�
 $statement = null;
 $pdo = null;
 ```
-これで(http://localhost:8888/php_web_app/public_html_w3/sql.php/)にアクセスした際、下記のような表示を取得する。
+これで
+http://localhost:8888/php_web_app/public_html_w3/sql.php/
+にアクセスした際、下記のような表示を取得する。
 </br>
 ↓出力結果
 ```php
