@@ -192,7 +192,7 @@ $statement = $pdo->prepare($sql);
 $statement->bindvalue(':lower',5,PDO::PARAM_INT);  //この一行を追記
 $statement->execute();
 ```
-これでlevelが5以上のプレイヤーのに表示できる。</br>
+これでlevelが5以上のプレイヤーのみ表示できる。</br>
 
 </br>
 また、引数を変数に指定する事も可能。</br>
