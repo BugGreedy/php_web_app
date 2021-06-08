@@ -68,7 +68,7 @@ Array ( [id] => 10 [name] => じゅん [level] => 1 [job_id] => )
 
 **PDO**：PHP DATABASE Objectの略。PHPとデータベースをつなぐオブジェクト。</br>
 `$pdo = new PDO('使用するDB:DBサーバー;dbname=DBの名前;文字コード','ユーザー名','パスワード');`</br>
-→＄pdoという変数をPDOというクラスで生成。引数に使用するDBの情報を記載。</br>
+→$pdoという変数をPDOというクラスで生成。引数に使用するDBの情報を記載。</br>
 ※最後のパスワードは空になっているとレッスンでは言っていたが、MAMP環境ではつながらなかったので`'root'`としている。</br>
 </br>
 
@@ -193,7 +193,6 @@ $statement->bindvalue(':lower',5,PDO::PARAM_INT);  //この一行を追記
 $statement->execute();
 ```
 これでlevelが5以上のプレイヤーのに表示できる。</br>
-- 
 
 </br>
 また、引数を変数に指定する事も可能。</br>
