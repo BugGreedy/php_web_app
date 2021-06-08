@@ -238,6 +238,7 @@ $statement = $pdo->prepare($sql);
 $statement->execute();
 ```
 今回はMAMP上では追加を確認できず。(エディタ上では追加された)</br>
+</br>
 ↓
 **対策方法がわかった**</br>
 paizaのエディタからphpMyAdminを確認したところ、playersテーブルのその他に**AUTO_INCREMENT**という項目が表示されていた。</br>
