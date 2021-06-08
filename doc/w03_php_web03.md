@@ -152,3 +152,18 @@ by paiza
 
 ### W3-3_データベースを使ってみよう-取り出し
 初歩的なSQL文を使ってDBの中身を取り出す。</br>
+```php
+// sql_w3-3.php
+
+$sql = 'SELECT * FROM players';
+↓
+$sql = 'SELECT name,level FROM players';
+```
+↓出力結果
+```php
+// 一行のみ抜粋
+
+Array ( [id] => 1 [name] => PHP_DB_SQL [level] => 12 [job_id] => 6 )
+↓
+Array ( [name] => PHP_DB_SQL [level] => 12 )
+```
