@@ -2,8 +2,10 @@
 
 $pdo = new PDO('mysql:host=localhost;dbname=LNG_db-sql;charset=utf8', 'root', 'root');
 
-$sql = 'SELECT name,level FROM players';
+$sql = 'SELECT * FROM players WHERE level >= :lower'; 
 $statement = $pdo->prepare($sql);
+$low_value = 7;                                                //  変数を追記
+$statement->bindValue(':lower',$low_value,PDO::PARAM_INT);    // 変数を引数に指定
 $statement->execute();
 
 $results = []; 

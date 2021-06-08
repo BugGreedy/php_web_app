@@ -5,6 +5,8 @@
 [W3-1_PHPでデータベースに接続しよう](#W3-1_PHPでデータベースに接続しよう)</br>
 [W3-2_テンプレートでデータを表示しよう](#W3-2_テンプレートでデータを表示しよう)</br>
 [W3-3_データベースを使ってみよう-取り出し](#W3-3_データベースを使ってみよう-取り出し)</br>
+[W3-4_データベースを使ってみよう-追加、要素、削除](#W3-4_データベースを使ってみよう-追加、要素、削除)</br>
+[W3-5_テーブルを結合してデータを取り出す](#W3-5_テーブルを結合してデータを取り出す)</br>
 
 
 
@@ -155,9 +157,11 @@ by paiza
 ```php
 // sql_w3-3.php
 
-$sql = 'SELECT * FROM players';
+$sql = 'SELECT * FROM players'; 
+// *→カラムを全て表示
 ↓
 $sql = 'SELECT name,level FROM players';
+// nameとlevelのみ表示
 ```
 ↓出力結果
 ```php
@@ -167,3 +171,101 @@ Array ( [id] => 1 [name] => PHP_DB_SQL [level] => 12 [job_id] => 6 )
 ↓
 Array ( [name] => PHP_DB_SQL [level] => 12 )
 ```
+</br>
+
+次に条件に合う行(レコード)のみ表示させる。</br>
+```php
+// sql_w3-3.php
+$sql = 'SELECT * FROM players'; 
+↓
+$sql = 'SELECT * FROM players WHERE >= 7'; 
+```
+これでlevelが7以上のプレイヤーのみ表示させる事ができた。</br>
+</br>
+
+PHPを用いているので、この条件を引数に当てて記述してみる。
+```php
+// level >= 5の条件を表示。SQL文の箇所を下記のように追記
+
+$sql = 'SELECT * FROM players WHERE level >= lower'; // lowerを追記
+$statement = $pdo->prepare($sql);
+$statement->bindvalue(':lower',5,PDO::PARAM_INT);  //この一行を追記
+$statement->execute();
+```
+これでlevelが5以上のプレイヤーのに表示できる。</br>
+- 
+
+</br>
+また、引数を変数に指定する事も可能。</br>
+
+```php
+// level >= 7の条件を表示。
+$sql = 'SELECT * FROM players WHERE level >= :lower'; 
+$statement = $pdo->prepare($sql);
+$low_value = 7;                                                //  変数を追記
+$statement->bindValue(':lower',$low_value,PDO::PARAM_INT);    // 変数を引数に指定
+$statement->execute();
+```
+</br>
+
+- `bindValue`： PHPのbindvalue()とは、プリペアドステートメントで使用するSQL文の中で、変数の値をバインドするための関数。</br>
+  SQL文に対して一部分の変更可能な箇所を定義し、さらに定義したものを自由に変更できるようにするためのDB機能。</br>
+  </br>
+- `PDO::PARAM_INT`：SQL INTEGER データ型を表す。(”整数を指定する”という意味らしいが、動かない(整数にしてくれない)との噂がある。)</br>
+  [関連時期](https://qiita.com/te2ji/items/a8e7211a69f313126f7c)</br>
+  [参考：定義済み定数](https://www.php.net/manual/ja/pdo.constants.php)</br>
+</br>
+
+***
+
+### W3-4_データベースを使ってみよう-追加、要素、削除
+PHPからDBにデータを追加する。</br>
+phpファイルのSQL文を書き換えて追加するコードを記述する。</br>
+SQL文の追加の仕方とは違い、変数に値を割り当ててレコードを追加していく。
+```php
+// sql_w3-4.phpにて 下記を追記
+$name = '霧島1号';
+$level = 1;
+$job_id = 1;
+$sql = 'INSERT INTO players (name, level, job_id) VALUES (:name, :level, :job_id)';
+$statement = $pdo->prepare($sql);
+$statement->bindValue(':name', $name, PDO::PARAM_STR);
+$statement->bindValue(':level', $level, PDO::PARAM_INT);
+$statement->bindValue(':job_id', $job_id, PDO::PARAM_INT);
+$statement->execute();
+
+$sql = 'SELECT * FROM players';
+$statement = $pdo->prepare($sql);
+$statement->execute();
+```
+今回はMAMP上では追加を確認できず。(エディタ上では追加された)</br>
+↓
+**対策方法がわかった**</br>
+paizaのエディタからphpMyAdminを確認したところ、playersテーブルのその他に**AUTO_INCREMENT**という項目が表示されていた。</br>
+この項目を自身のMAMP環境のphpMyAdminの構造から確認したところ、`A_I`なるチェックボックスがある。</br>
+これをONにして再度試行してみると、自動でIDが＋1されてレコードが生成できた。</br>
+</br>
+
+次に更新を実行してみる。</br>
+```php
+$sql = 'UPDATE players SET level = 50 WHERE id = 1';
+$statement = $pdo->prepare($sql);
+$statement->execute();
+```
+今度はMAMP上でも実行された。</br>
+</br>
+
+次にレコードを削除してみる。
+```php
+$sql = 'DELETE FROM players WHERE id = 12';
+$statement = $pdo->prepare($sql);
+$statement->execute();
+```
+これもMAMP上で実行できた。</br>
+</br>
+
+***
+
+### W3-5_テーブルを結合してデータを取り出す
+
+
