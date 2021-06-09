@@ -1,2 +1,3 @@
 <hr>
-<footer>by paiza</footer>
+
+<footer>by bugtas</footer>

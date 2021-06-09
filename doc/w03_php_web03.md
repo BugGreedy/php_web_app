@@ -7,6 +7,9 @@
 [W3-3_データベースを使ってみよう-取り出し](#W3-3_データベースを使ってみよう-取り出し)</br>
 [W3-4_データベースを使ってみよう-追加、要素、削除](#W3-4_データベースを使ってみよう-追加、要素、削除)</br>
 [W3-5_テーブルを結合してデータを取り出す](#W3-5_テーブルを結合してデータを取り出す)</br>
+[W3-6_データをtableタグで表示する](#W3-6_データをtableタグで表示する)</br>
+[W3-7_特定のプレイヤーを表示する1](#W3-7_特定のプレイヤーを表示する1)</br>
+[W3-8_特定のプレイヤーを表示する2](#W3-8_特定のプレイヤーを表示する2)</br>
 
 
 
@@ -70,6 +73,8 @@ Array ( [id] => 10 [name] => じゅん [level] => 1 [job_id] => )
 `$pdo = new PDO('使用するDB:DBサーバー;dbname=DBの名前;文字コード','ユーザー名','パスワード');`</br>
 →$pdoという変数をPDOというクラスで生成。引数に使用するDBの情報を記載。</br>
 ※最後のパスワードは空になっているとレッスンでは言っていたが、MAMP環境ではつながらなかったので`'root'`としている。</br>
+**FETCHメソッド**：該当するデータを1行返すメソッド。</br>
+**PDO::FETCH_ASSOC**：取得した(返信された)際のカラム名で添字を付けた状態で返信。</br>
 </br>
 
 ***
@@ -267,5 +272,250 @@ $statement->execute();
 ***
 
 ### W3-5_テーブルを結合してデータを取り出す
+まず、SQLでやった時と同様にPHPでテーブル同士をつなげて表示する。</br>
+今回は**左結合(`LEFT JOIN`)**で結合する。
+```php
+<?php
 
+$pdo = new PDO('mysql:host=localhost; dbname=LNG_db-sql; charset=utf8', 'root', 'root');
+// ↓LEFT JOIN以降を追記 
+$sql = 'SELECT * FROM players LEFT JOIN jobs ON jobs.id = players.job_id';
+$statement = $pdo->prepare($sql);
+$statement->execute();
 
+$results = [];
+while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+  $results[] = $row;
+}
+
+$statement = null;
+$pdo = null;
+
+$message = 'hello world';
+require_once 'views/content.tpl.php';
+```
+↓出力結果
+```php
+// LEFT JOIN jobs ON jobs.id = players.job_id 追記前
+Array ( [id] => 1 [name] => PHP_DB_SQL [level] => 30 [job_id] => 6 )
+
+Array ( [id] => 2 [name] => ケン [level] => 7 [job_id] => 2 )
+
+↓
+
+// LEFT JOIN jobs ON jobs.id = players.job_id 追記後
+Array ( [id] => 6 [name] => PHP_DB_SQL [level] => 30 [job_id] => 6 [job_name] => 勇者 [vitality] => 10 [strength] => 10 [agility] => 10 [intelligence] => 10 [luck] => 10 )
+
+Array ( [id] => 2 [name] => ケン [level] => 7 [job_id] => 2 [job_name] => 盗賊 [vitality] => 3 [strength] => 3 [agility] => 8 [intelligence] => 5 [luck] => 7 )
+```
+</br>
+
+次にカラムの表示をプレイヤーのid、名前、レベル、職業名だけにする。</br>
+```php
+$sql = 'SELECT * FROM players LEFT JOIN jobs ON jobs.id = players.job_id';
+↓
+$sql = 'SELECT players.id,name,level,job_name FROM players LEFT JOIN jobs ON jobs.id = players.job_id';
+```
+↓出力結果
+```php
+Array ( [id] => 6 [name] => PHP_DB_SQL [level] => 30 [job_id] => 6 [job_name] => 勇者 [vitality] => 10 [strength] => 10 [agility] => 10 [intelligence] => 10 [luck] => 10 )
+
+Array ( [id] => 2 [name] => ケン [level] => 7 [job_id] => 2 [job_name] => 盗賊 [vitality] => 3 [strength] => 3 [agility] => 8 [intelligence] => 5 [luck] => 7 )
+
+↓
+
+Array ( [id] => 1 [name] => PHP_DB_SQL [level] => 30 [job_name] => 勇者 )
+
+Array ( [id] => 2 [name] => ケン [level] => 7 [job_name] => 盗賊 )
+```
+</br>
+
+***
+
+### W3-6_データをtableタグで表示する
+テーブル表示の見た目を変える。見た目を変えるにはテンプレートファイルを編集する。</br>
+```php
+// content_w3-6.tpl.php
+<?php foreach($results as $player){ ?>
+  <p> <?php print_r($player); ?> </p>
+<?php } ?>
+
+↓
+
+<?php foreach($results as $player){ ?>
+  <p>
+    <?= $player['id'] ?>
+    <?= $player['name'] ?>
+    <?= $player['level'] ?>
+    <?= $player['job_name'] ?>               
+  </p>
+<?php } ?>
+```
+↓出力結果
+```php
+Array ( [id] => 1 [name] => PHP_DB_SQL [level] => 30 [job_name] => 勇者 )
+
+Array ( [id] => 2 [name] => ケン [level] => 7 [job_name] => 盗賊 )
+
+↓
+
+1 PHP_DB_SQL 30 勇者
+
+2 ケン 7 盗賊
+```
+</br>
+
+さらにHTMLのtableで表示する。
+```php
+// content_w3-6.tpl.php
+<table>
+  <?php foreach ($results as $player) { ?>
+    <tr>
+      <td><?= $player['id'] ?></td>
+      <td><?= $player['name'] ?></td>
+      <td><?= $player['job_name'] ?></td>
+      <td><?= $player['level'] ?></td>
+    </tr>
+  <?php } ?>
+</table>
+```
+↓出力結果
+```php
+1	PHP_DB_SQL	勇者	30
+2	ケン	盗賊	7
+3	リン	戦士	1
+4	ユウ	狩人	3
+```
+</br>
+
+***
+
+### W3-7_特定のプレイヤーを表示する1
+PHPを使って簡単なWebアプリケーションを作成する。プレイヤー一覧からそのプレイヤーの詳細情報を表示する。</br>
+sql.phpと同様にtable上でplayersテーブルを表示するファイルを作成。(index_w3-7.php)</br>
+これをもとにプレイヤー情報の詳細を表示するファイルを作成。(show_player_w3-7.php)</br>
+show_player_w3-7.phpがidを受け取った際、そのidのレコード1行のみを表示するように編集。</br>
+```php
+// show_player_w3-7.php
+<?php
+
+$pdo = new PDO('mysql:host=localhost; dbname=LNG_db-sql; charset=utf8', 'root', 'root');
+
+// idを受け取ったら詳細を表示するという記述を追記
+if(isset($_REQUEST['id'])){
+  $id = $_REQUEST['id'];
+}
+
+$sql = 'SELECT players.id, name, level, job_name 
+FROM players LEFT JOIN jobs ON jobs.id = players.job_id
+WHERE players.id =:id';  //ここを追記
+
+$statement = $pdo->prepare($sql);
+$statement->bindValue(':id',$id,PDO::PARAM_INT);
+$statement->execute();
+
+// 下記を削除
+// $results = [];
+// while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+//   $results[] = $row;
+// }
+
+// 下記を追記
+$player = $statement->fetch(PDO::FETCH_ASSOC);
+
+$statement = null;
+$pdo = null;
+
+$message = 'This is Detail of the Player.';
+// require_once 'views/index_w3-7.tpl.php';
+// 正しく動くか確認するためとりあえずprint_rで出力してみる。下記を追記
+print_r($player);
+```
+</br>
+
+***
+
+### W3-8_特定のプレイヤーを表示する2
+前章で記述した確認用のprint_rを削除し、表示用のテンプレートのリンクを作成。そのテンプレートファイルも作成。(profile.tpl.php)</br>
+```php
+// show_player_w3-7.php
+
+$message = 'This is Detail of the Player.';
+// require_once 'views/index_w3-7.tpl.php';
+// 正しく動くか確認するためとりあえずprint_rで出力してみる。下記を追記
+print_r($player);
+
+↓
+
+$message = 'This is profile of the Player.';
+require_once 'views/profile.tpl.php';
+```
+</br>
+
+テンプレートファイルを作成。
+```php
+// profile.tpl.php(index_w3-7.tpl.phpをコピーして作成)
+<!DOCTYPE html>
+<html lang='ja'>
+<?php include('header.inc.php'); ?>
+
+<body>
+
+  <h1>Player profile</h1>
+  <p><?= $message ?></p>
+
+  // 下記を追記
+  <ul>
+    <li>ID：<?= $player['id'] ?></li>
+    <li>名前：<?= $player['name'] ?></li>
+    <li>職業：<?= $player['job_name'] ?></li>
+    <li>レベル：<?= $player['level'] ?></li>
+  </ul>
+
+  <p><a href='index_w3-7.php'>プレイヤーリストに戻る</a></p>
+
+  <?php include('footer.inc.php'); ?>
+</body>
+
+</html>
+```
+</br>
+
+次にプレイヤー一覧ページ(index_w3-7.php)から詳細ページ(show_player_w3-7.php)に飛べるようにリンクを設定。</br>
+```php
+// index_w3-7.tpl.php
+<!DOCTYPE html>
+<html lang='ja'>
+<?php include('header.inc.php'); ?>
+
+<body>
+
+  <h1><?= $message ?></h1>
+
+  <table>
+    <tr style="background:#ccccff">
+      <th>ID</ht>
+      <th>名前</ht>
+      <th>職業</ht>
+      <th>レベル</ht>
+      <th>詳細</ht>
+    </tr>
+    <?php foreach ($results as $player) { ?>
+
+      <tr>
+        <td><?= $player['id'] ?></td>
+        <td><?= $player['name'] ?></td>
+        <td><?= $player['job_name'] ?></td>
+        <td><?= $player['level'] ?></td>
+        // 下記を追記
+        <td><a href='show_player_w3-7.php?id=<?= $player['id'] ?>'>表示</a></td>
+      </tr>
+    <?php } ?>
+  </table>
+
+  <?php include('footer.inc.php'); ?>
+</body>
+
+</html>
+```
+これで詳細に飛べるリンクを各レコードに設定できた。
