@@ -8,6 +8,7 @@
 [W4-4_Eloquentでデータベースを使ってみよう(追加・更新・削除)](#W4-4_Eloquentでデータベースを使ってみよう(追加・更新・削除))</br>
 [W4-5_Eloquentでテーブルを連結してデータを取り出す](#W4-5_Eloquentでテーブルを連結してデータを取り出す)</br>
 [W4-6_特定のプレイヤーを表示する-その1](#W4-6_特定のプレイヤーを表示する-その1)</br>
+[W4-7_特定のプレイヤーを表示する-その2](#W4-7_特定のプレイヤーを表示する-その2)</br>
 
 
 
@@ -318,19 +319,105 @@ if(isset($_REQUEST['id'])){
 }
 
 // 取得したidを代入
-$player = Player::find($id);
+$player = Player::find($id); // 注意：レコードをひとつだけ表示するので単数形にすること。
 $message = 'hello world';
 // require_once 'views/index_w4-6.tpl.php';
 print_r($player);
 ```
 これでid=1を与えてブラウザにアクセスしてみる。
-(http://localhost:8888/php_web_app/curriculum_W4/public_html_w4/index_w4-6.php?id=1)</br>
+(http://localhost:8888/php_web_app/curriculum_W4/public_html_w4/show_w4-6.php?id=1)</br>
 ↓出力結果</br>
 ```php
 Player Object ( [timestamps] => [connection:protected] => default [table:protected] => players [primaryKey:protected] => id [keyType:protected] => int [incrementing] => 1 [with:protected] => Array ( ) [withCount:protected] => Array ( ) [preventsLazyLoading] => [perPage:protected] => 15 [exists] => 1 [wasRecentlyCreated] => [attributes:protected] => Array ( [id] => 1 [name] => Eloquent [level] => 30 [job_id] => 6 ) [original:protected] => Array ( [id] => 1 [name] => Eloquent [level] => 30 [job_id] => 6 ) [changes:protected] => Array ( ) [casts:protected] => Array ( ) [classCastCache:protected] => Array ( ) [dates:protected] => Array ( ) [dateFormat:protected] => [appends:protected] => Array ( ) [dispatchesEvents:protected] => Array ( ) [observables:protected] => Array ( ) [relations:protected] => Array ( ) [touches:protected] => Array ( ) [hidden:protected] => Array ( ) [visible:protected] => Array ( ) [fillable:protected] => Array ( ) [guarded:protected] => Array ( [0] => * ) )
 ```
+</br>
+
+***
+
+### W4-7_特定のプレイヤーを表示する-その2
+前回の続き。では、次に詳細表示ページを編集する。
+```php
+// index_w4-6.phpにてテンプレートを読み込めるように修正。
+$player = Player::find($id);
+$message = 'This is Profile.';
+require_once 'views/profile_w4-6.tpl.php';
+// print_r($player);
+```
+</br>
+
+```php
+// profile.tpl.php
+<!DOCTYPE html>
+<html lang='ja'>
+<?php include('header.inc.php'); ?>
+
+<body>
+
+  <h1>Player profile</h1>
+  <p><?= $message ?></p>
+
+  <ul>
+    <li>ID：<?= $player->id ?></li>
+    <li>名前:<?= $player->name ?></li>
+    <li>レベル：<?= $player->level ?></li>
+    <li>職業id：<?= $player->job_id ?></li>
+    <!-- 下記を追記 -->
+    <li>職業名：<?= $player->job->job_name ?></li>
+  </ul>
+
+  <p><a href='index_w4-6.php'>リストに戻る</a></p>
+
+  <?php include('footer.inc.php'); ?>
+</body>
+
+</html>
+```
+これで詳細ページを表示できるようになった。</br>
+</br>
+
+最後にプレイヤー一覧ページ(index)からこの詳細ページにとべるようにリンクを設定。
+```php
+// index_w4-6.tpl.php
+<!DOCTYPE html>
+<html lang='ja'>
+<?php include('header.inc.php'); ?>
+
+<body>
+
+  <h1>Player List</h1>
+  <p><?= $message ?></p>
 
 
+  <table>
+    <tr style='background: #AD9DED'>
+      <th>ID</th>
+      <th>名前</th>
+      <th>職業</th>
+      <th>レベル</th>
+      <th>詳細</th>
+    </tr>
 
+    <?php foreach ($players as $player) { ?>
+    <tr>
+      <td><?= $player->id ?></td>
+      <td><?= $player->name ?></td>
+      <td><?= $player->level ?></td>
+      <td><?= $player->job->job_name ?></td>
+      <!-- 下記を追記 -->
+      <td><a href='http://localhost:8888/php_web_app/curriculum_W4/public_html_w4/show_w4-6.php?id=<?= $player->id ?>'>表示</a></td>
+    </tr>
+    <?php } ?>
+  </table>
+
+  <?php include('footer.inc.php'); ?>
+</body>
+
+</html>
+```
+</br>
+
+***
+
+### W4-8_
 
 

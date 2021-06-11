@@ -23,10 +23,16 @@ class Player extends Model
   }
 }
 
-class Job extends Model
-{
+class Job extends Model{
 }
 
-$players = Player::all();
-$message = 'hello world';
-require_once 'views/index_w4-6.tpl.php';
+// 下記を追記。GETメソッドで指定されたidを取得したら〜という条件記述
+if(isset($_REQUEST['id'])){
+  $id = $_REQUEST['id'];
+}
+
+// 取得したidを代入
+$player = Player::find($id);
+$message = 'This is Profile.';
+require_once 'views/profile_w4-6.tpl.php';
+// print_r($player);
