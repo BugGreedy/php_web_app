@@ -7,6 +7,7 @@
 [W4-3_Eloquentでデータベースを使ってみよう(いろんな読み出し)](#W4-3_Eloquentでデータベースを使ってみよう(いろんな読み出し))</br>
 [W4-4_Eloquentでデータベースを使ってみよう(追加・更新・削除)](#W4-4_Eloquentでデータベースを使ってみよう(追加・更新・削除))</br>
 [W4-5_Eloquentでテーブルを連結してデータを取り出す](#W4-5_Eloquentでテーブルを連結してデータを取り出す)</br>
+[W4-6_特定のプレイヤーを表示する-その1](#W4-6_特定のプレイヤーを表示する-その1)</br>
 
 
 
@@ -278,7 +279,56 @@ require_once 'views/content_w4-5.tpl.php';
 
 ***
 
-### W4-6_
+### W4-6_特定のプレイヤーを表示する-その1
+特定のプレイヤーのレコードをクリックするとその詳細を表示するプログラムを作成する。</br>
+まず、指定のレコードを取り出す記述をし、print_rで正しく取得できているか確認する
+```php
+// index_w4-6.php
+<?php
+
+require_once './vendor/autoload.php';
+$db = new Illuminate\Database\Capsule\Manager;
+$db->addConnection([
+  'driver'    => 'mysql',
+  'host'      => 'localhost',
+  'database'  => 'LNG_db-sql',
+  'username'  => 'root',
+  'password'  => 'root'
+]);
+$db->setAsGlobal();
+$db->bootEloquent();
+
+use Illuminate\Database\Eloquent\Model;
+
+class Player extends Model
+{
+  public $timestamps = false;
+  public function job()
+  {
+    return $this->belongsTo('Job');
+  }
+}
+
+class Job extends Model{
+}
+
+// 下記を追記。GETメソッドで指定されたidを取得したら〜という条件記述
+if(isset($_REQUEST['id'])){
+  $id = $_REQUEST['id'];
+}
+
+// 取得したidを代入
+$player = Player::find($id);
+$message = 'hello world';
+// require_once 'views/index_w4-6.tpl.php';
+print_r($player);
+```
+これでid=1を与えてブラウザにアクセスしてみる。
+(http://localhost:8888/php_web_app/curriculum_W4/public_html_w4/index_w4-6.php?id=1)</br>
+↓出力結果</br>
+```php
+Player Object ( [timestamps] => [connection:protected] => default [table:protected] => players [primaryKey:protected] => id [keyType:protected] => int [incrementing] => 1 [with:protected] => Array ( ) [withCount:protected] => Array ( ) [preventsLazyLoading] => [perPage:protected] => 15 [exists] => 1 [wasRecentlyCreated] => [attributes:protected] => Array ( [id] => 1 [name] => Eloquent [level] => 30 [job_id] => 6 ) [original:protected] => Array ( [id] => 1 [name] => Eloquent [level] => 30 [job_id] => 6 ) [changes:protected] => Array ( ) [casts:protected] => Array ( ) [classCastCache:protected] => Array ( ) [dates:protected] => Array ( ) [dateFormat:protected] => [appends:protected] => Array ( ) [dispatchesEvents:protected] => Array ( ) [observables:protected] => Array ( ) [relations:protected] => Array ( ) [touches:protected] => Array ( ) [hidden:protected] => Array ( ) [visible:protected] => Array ( ) [fillable:protected] => Array ( ) [guarded:protected] => Array ( [0] => * ) )
+```
 
 
 
