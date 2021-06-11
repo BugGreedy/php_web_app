@@ -17,8 +17,10 @@ class Player extends Illuminate\Database\Eloquent\Model {
   public $timestamps = false; // ←備考1
 }
 
-// // 下記は更新の際のコード
-$players = Player::where('id','>=',11)->delete();
+// 下記は更新の際のコード
+// $player = Player::find(19);
+// $player->delete();
+$players = Player::where('id','>=',11)->delete;
 
 
 // 下記は更新の際のコード

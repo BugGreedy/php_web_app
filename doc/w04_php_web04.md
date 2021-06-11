@@ -6,6 +6,7 @@
 [W4-2_Eloquentでデータを表示しよう](#W4-2_Eloquentでデータを表示しよう)</br>
 [W4-3_Eloquentでデータベースを使ってみよう(いろんな読み出し)](#W4-3_Eloquentでデータベースを使ってみよう(いろんな読み出し))</br>
 [W4-4_Eloquentでデータベースを使ってみよう(追加・更新・削除)](#W4-4_Eloquentでデータベースを使ってみよう(追加・更新・削除))</br>
+[W4-5_Eloquentでテーブルを連結してデータを取り出す](#W4-5_Eloquentでテーブルを連結してデータを取り出す)</br>
 
 
 
@@ -197,6 +198,87 @@ $players = Player::where('id','>=',11)->delete();
 ```
 </br>
 
+***
+
+### W4-5_Eloquentでテーブルを連結してデータを取り出す
+**多対1の関係**：例えばプレイヤーとジョブの関係ついて、ジョブ一つのIDに対してプレイヤーは複数のIDが関連付けられている(例：戦士というジョブのプレイヤーは複数いる)。このような一方のテーブルにおいて一つのレコードに対して、関連付けられたもう一方のテーブルにおいては複数のIDに関連付けられている状態を**多対1の関係**という。</br>
+</br>
+
+それではまず、playersテーブルとjobsテーブルを連結する。</br>
+```php
+// sql_w4-5.php
+<?php
+
+require_once './vendor/autoload.php';
+$db = new Illuminate\Database\Capsule\Manager;
+$db->addConnection([
+  'driver'    => 'mysql',
+  'host'      => 'localhost',
+  'database'  => 'LNG_db-sql',
+  'username'  => 'root',
+  'password'  => 'root'
+]);
+$db->setAsGlobal();
+$db->bootEloquent();
+
+// 下記を追記
+use Illuminate\Database\Eloquent\Model;  // これはclassを定義する時に、親クラスのパスを省略できる宣言。
+
+// class Player extends Illuminate\Database\Eloquent\Model
+// {
+//   public $timestamps = false;
+// }
+
+// classの箇所を下記のように編集
+class Player extends Model{
+  public $timestamps = false;
+  public function job(){
+    return $this->belongsTO('Job');  // belongsTo('テーブル名')で"テーブル名に所属する"となる。
+    // 今回はplayersテーブルはjobテーブルに所属するとなる。→ 多対1の関係を表している。
+  }
+}
+
+// 次にjobsテーブルのモデルを定義する。
+class Job extends model{
+}
+
+$players = Player::all();
+$message = 'hello world';
+require_once 'views/content_w4-5.tpl.php';
+```
+次に連結したテーブルの情報を表示できるようにテンプレートを編集する。
+```php
+// content_w4-5.tpl.php
+<!DOCTYPE html>
+<html lang='ja'>
+<?php include('header.inc.php'); ?>
+
+<body>
+
+  <h1><?= $message ?></h1>
+
+  <?php foreach ($players as $player) { ?>
+    <p>
+      <?= $player->id ?>,
+      <?= $player->name ?>,
+      <?= $player->level ?>,
+      <?= $player->job_id ?>
+      <!-- 下記を追記 -->
+      <?= $player->job->job_name ?>
+    </p>
+  <?php } ?>
+
+  <?php include('footer.inc.php'); ?>
+</body>
+
+</html>
+```
+これでプレイヤー情報にjobsテーブルから職業名を表示できた。</br>
+</br>
+
+***
+
+### W4-6_
 
 
 
