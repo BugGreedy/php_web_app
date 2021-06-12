@@ -28,5 +28,6 @@ class Job extends Model
 }
 
 $players = Player::all();
+$jobs = Job::all();
 $message = 'hello world';
 require_once 'views/index_w4-8.tpl.php';

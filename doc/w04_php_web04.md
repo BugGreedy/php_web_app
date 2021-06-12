@@ -9,6 +9,8 @@
 [W4-5_Eloquentでテーブルを連結してデータを取り出す](#W4-5_Eloquentでテーブルを連結してデータを取り出す)</br>
 [W4-6_特定のプレイヤーを表示する-その1](#W4-6_特定のプレイヤーを表示する-その1)</br>
 [W4-7_特定のプレイヤーを表示する-その2](#W4-7_特定のプレイヤーを表示する-その2)</br>
+[W4-8_特定職業のプレイヤーインデックスを表示する-その1](#W4-8_特定職業のプレイヤーインデックスを表示する-その1)</br>
+[W4-9_特定職業のプレイヤーインデックスを表示するｰその2](#W4-9_特定職業のプレイヤーインデックスを表示するｰその2)</br>
 
 
 
@@ -418,6 +420,121 @@ require_once 'views/profile_w4-6.tpl.php';
 
 ***
 
-### W4-8_
+### W4-8_特定職業のプレイヤーインデックスを表示する-その1
+職業一覧を作成し、その詳細ページにその職業のプレイヤーを表示できるようにする。</br>
+```php
+// index_w4-8.tpl.phpのplayer listの下に下記を追記
 
+  <!-- 下記を追記 -->
+  <h2>Job List</h2>
+  <table>
+      <tr style='background: #93F051'>
+        <th>ID</th>
+        <th>職業名</th>
+        <th>体力</th>
+        <th>強さ</th>
+      </tr>
+    <?php foreach ($jobs as $job) { ?>
+      <tr>
+        <td><?= $job->id ?></td>
+        <td><?= $job->job_name ?></td>
+        <td><?= $job->vitality ?></td>
+        <td><?= $job->strength ?></td>
+      </tr>
+    <?php } ?>
+  </table>
+```
+</br>
+
+***
+
+### W4-9_特定職業のプレイヤーインデックスを表示するｰその2
+前章の続き。</br>
+jobの詳細ページを編集。
+```php
+//show_job_w4-8.php
+
+// 下記をjobを参照するように変更
+$job = Job::find($id);
+$message = 'This is Profile.';
+require_once 'views/job_profile_w4-8.tpl.php';
+```
+次にjob詳細用のテンプレートを編集
+```php
+// job_profile_w4-8.tpl.php
+<!DOCTYPE html>
+<html lang='ja'>
+<?php include('header.inc.php'); ?>
+
+<body>
+
+  <h1>Job profile</h1>
+  <p><?= $message ?></p>
+
+  // 下記をjobの情報を表示するように編集。
+  <ul>
+    <li>ID：<?= $job->id ?></li>
+    <li>職業名：<?= $job->id ?></li>
+    <li>体力：<?= $job->vitality ?></li>
+    <li>強さ：<?= $job->strength ?></li>   
+  </ul>
+
+  <p><a href='index_w4-6.php'>リストに戻る</a></p>
+
+  <?php include('footer.inc.php'); ?>
+</body>
+
+</html>
+```
+次にその職業のプレイヤーを表示するように編集する。</br>
+今回はjobモデルが複数のplayerモデルを持つので**1対多**の記述を行う。
+
+```php
+// show_job_w4-8.php
+
+class Job extends Model{
+}
+
+↓
+
+class Job extends Model{
+  //  下記を追記
+  public function player(){
+    return $this->hasMany('Player');
+  }
+}
+
+// テンプレートファイル(job_profile.tpl.php)に所属プレイヤーを表示できるよう記述する。
+<!DOCTYPE html>
+<html lang='ja'>
+<?php include('header.inc.php'); ?>
+
+<body>
+
+  <h1>Job profile</h1>
+  <p><?= $message ?></p>
+
+  <ul>
+    <li>ID：<?= $job->id ?></li>
+    <li>職業名：<?= $job->job_name ?></li>
+    <li>体力：<?= $job->vitality ?></li>
+    <li>強さ<?= $job->strength ?></li>
+  </ul>
+
+  // 下記を追記
+  <h2>Player</h2>
+  <?php foreach ($job->player as $player) { ?>
+    <p>
+      <?= $player->id . ',' . $player->name ?>
+      <a href='show_player_w4<-8.php?id=<?= $player->id; ?>'>表示</a>
+    </p>
+  <?php } ?>
+
+  <p><a href='index_w4-8.php'>リストに戻る</a></p>
+
+  <?php include('footer.inc.php'); ?>
+</body>
+
+</html>
+```
 
