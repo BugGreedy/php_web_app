@@ -27,4 +27,27 @@ PHPとEloquentを用いてメモ帳アプリを作成する。</br>
   ![](/img/memoappli.png)</br>
 </br>
 
+- アプリのDB概要
+  - データベース：memo
+  - テーブル：note
+  - カラム：
+    - id(INT) ※数値
+    - title(VARCHAR 255) ※CHARACTER VARYING(文字の可変性)の略。可変長の255文字の文字列のデータ型の事。
+    - content(TEXT)
+    - created_at(TIMESTAMP)
+    - updated_at(TIMESTAMP)
+</br>
 
+- メモ帳アプリの作成手順
+  - データベースを用意する
+  - データベースに接続して、メモ一覧を表示する
+  - メモを表示する
+  - markdownで表示する
+  - 新規メモを作成する
+  - メモを保存・削除する
+  - メモを編集・保存する
+</br>
+
+***
+
+###
