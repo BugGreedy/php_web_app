@@ -22,6 +22,7 @@ PHPとEloquentを用いてメモ帳アプリを作成する。</br>
   - 詳細画面(show.tpl.php)
   - 編集画面(edit.tpl.php)
 </br>
+
 ![画面遷移図](./img/memoappli.png)</br>
 </br>
 
