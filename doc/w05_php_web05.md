@@ -23,7 +23,7 @@ PHPとEloquentを用いてメモ帳アプリを作成する。</br>
   - 編集画面(edit.tpl.php)
 </br>
 
-![](/img/memoappli.png)</br>
+![ページ遷移図](/img/memoappli.png)</br>
 </br>
 
 
