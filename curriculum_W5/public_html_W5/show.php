@@ -8,5 +8,7 @@ if(isset($_REQUEST['id'])){
   $note = Note::find($id);
 }
 
+$my_html = Michelf\Markdown::defaultTransform($note->content);
+
 
 require_once 'views/show.tpl.php';

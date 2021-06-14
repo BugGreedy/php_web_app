@@ -7,6 +7,7 @@
 [W5-3_メモ一覧を表示しよう](#W5-3_メモ一覧を表示しよう)</br>
 [W5-4_メモを表示しよう(詳細ページ)](#W5-4_メモを表示しよう(詳細ページ))</br>
 [W5-5_Markdownで表示しよう](#W5-5_Markdownで表示しよう)</br>
+[W5-6_新規メモを作ろう](#W5-6_新規メモを作ろう)</br>
 
 </br>
 
@@ -255,8 +256,16 @@ require_once 'views/show.tpl.php';
   # プログラムのディレクトリで実行
   $ composer require michelf/php-markdown
   ```
-  ※はじめにインストールを試みた際、eloquent`("illuminate/database": "^8.46")`をすでにインストールしている状態では入れられなかったため、一度conposer.yarnなどを削除してから再インストールしたらできた。</br>
-  その後、改めてeloquentをインストールした。</br>
+  `composer.json`を確認してみると
+  ```json
+  {
+    "require": {
+        "illuminate/database": "^8.46",
+        "michelf/php-markdown": "^1.9"
+    }
+  }
+  ```
+  上記のようにphp-Markdownが追加されている。</br>
   </br>
   `db_connect.php`において下記のように自動で読み込むように設定されているからすでにこのライブラリを使用できる環境にある。
   ```php
@@ -302,7 +311,20 @@ require_once 'views/show.tpl.php';
 ↓
 
 // PHP-Markdown変換後
+タイトル：markdownメモ
 
+世界の皆さん、こんにちは。
+よろしくお願いします。
+
+本日のお買い得
+apple
+orange
+jucie
 ```
+</br>
+
+***
+
+### W5-6_新規メモを作ろう
 
 

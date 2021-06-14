@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '0f80b59d39b12d35ad72c2dcf7099999fa7575b7',
+        'reference' => 'bf42a1caf8d03e543770d316ba78fca060588c9e',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '0f80b59d39b12d35ad72c2dcf7099999fa7575b7',
+            'reference' => 'bf42a1caf8d03e543770d316ba78fca060588c9e',
             'dev_requirement' => false,
         ),
         'doctrine/inflector' => array(
@@ -80,6 +80,15 @@
             'install_path' => __DIR__ . '/../illuminate/support',
             'aliases' => array(),
             'reference' => '79e1ec26d58426e4f06e5b548712a8a6dc1ffdca',
+            'dev_requirement' => false,
+        ),
+        'michelf/php-markdown' => array(
+            'pretty_version' => '1.9.0',
+            'version' => '1.9.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../michelf/php-markdown',
+            'aliases' => array(),
+            'reference' => 'c83178d49e372ca967d1a8c77ae4e051b3a3c75c',
             'dev_requirement' => false,
         ),
         'nesbot/carbon' => array(

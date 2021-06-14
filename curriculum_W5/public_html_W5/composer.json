@@ -1,5 +1,6 @@
 {
     "require": {
-        "illuminate/database": "^8.46"
+        "illuminate/database": "^8.46",
+        "michelf/php-markdown": "^1.9"
     }
 }
