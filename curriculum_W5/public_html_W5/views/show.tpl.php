@@ -9,7 +9,7 @@
   <p>タイトル：<?= $note->title ?></p>
   <div><?= $my_html ?></div>
   
-  <p><a href='index.php'>一覧に戻る</a> | 編集 | 削除></p>
+  <p><a href='index.php'>一覧に戻る</a> | 編集 | <a href='destroy.php?id=<?= $note->id ?>'>削除</a></p>
 
   <?php include('footer.inc.php'); ?>
 </body>

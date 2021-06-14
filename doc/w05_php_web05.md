@@ -8,6 +8,8 @@
 [W5-4_メモを表示しよう(詳細ページ)](#W5-4_メモを表示しよう(詳細ページ))</br>
 [W5-5_Markdownで表示しよう](#W5-5_Markdownで表示しよう)</br>
 [W5-6_新規メモを作ろう](#W5-6_新規メモを作ろう)</br>
+[W5-7_新規メモを保存しよう](#W5-7_新規メモを保存しよう)</br>
+[W5-8_メモを編集しよう](#W5-8_メモを編集しよう)</br>
 
 </br>
 
@@ -375,6 +377,49 @@ require_once 'views/new.tpl.php'
 
 ***
 
-### W5-7_
+### W5-7_新規メモを保存しよう
+ここではメモを新規保存する機能に加え、削除機能も追加する。</br>
+新規保存するファイル`create.php`を作成。
+```php
+<?php
+
+require_once 'db_connect.php';
+
+$note = new Note;                      // 新規のNoteオブジェクトをセットして
+$note->title = $_REQUEST['title'];     // フォームから受け取った情報を入力
+$note->content = $_REQUEST['content'];
+$note->save();                         // それから保存している。
+
+header('Location: show.php?id='.$note->id);  // show.phpを呼び出して、別のページに処理を切り替えている。
+exit;   // 呼び出し元の処理を中断         つまり、入力した内容を一度show.php?id=にて詳細画面を表示する。
+```
+</br>
+
+次にメモの削除機能を追加する。</br>
+create.phpをコピーして`destroy.php`を作成する。
+```php
+// destroy.php
+<?php
+
+require_once 'db_connect.php';
+
+if(isset($_REQUEST['id'])){
+  $id = $_REQUEST['id'];
+  $note = Note::find($id);
+  $note->delete();
+}
 
 
+header('Location: index.php?id='.$note->id);  //index.phpを呼び出して、一覧ページに処理を切り替えている。
+exit; 
+```
+詳細ページの削除にこの削除ファイルのリンクを設置</br>
+```php
+// show.tpl.php 下記に変更
+  <p><a href='index.php'>一覧に戻る</a> | 編集 | <a href='destroy.php?id=<?= $note->id ?>'>削除</a></p>
+```
+</br>
+
+***
+
+### W5-8_メモを編集しよう
