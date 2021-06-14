@@ -14,10 +14,11 @@
     <?php foreach ($notes as $note) { ?>
       <tr>
         <td><?= $note->id ?></td>
-        <td><?= $note->title ?></td>
+        <td><a href='show.php?id=<?= $note->id ?>'><?= $note->title ?></a></td>
       </tr>
     <?php } ?>
   </table>
+
   <p>新規メモ</p>
 
   <?php include('footer.inc.php'); ?>
