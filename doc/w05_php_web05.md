@@ -291,5 +291,18 @@ require_once 'views/show.tpl.php';
 ```php
 // show.tpl.php
 
+```
+↓出力結果
+```php
+// PHP-Markdown変換前
+タイトル：markdownメモ
+
+# 世界の皆さん、こんにちは。 よろしくお願いします。 ## 本日のお買い得 - apple - orange - jucie
+
+↓
+
+// PHP-Markdown変換後
+
+```
 
 
