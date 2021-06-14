@@ -19,7 +19,7 @@
     <?php } ?>
   </table>
 
-  <p>新規メモ</p>
+  <p><a href='new.php'>新規メモ</a></p>
 
   <?php include('footer.inc.php'); ?>
 </body>

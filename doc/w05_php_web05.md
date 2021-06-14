@@ -326,5 +326,55 @@ jucie
 ***
 
 ### W5-6_新規メモを作ろう
+メモを新規作成できるページを入力フォームを用いて作成する。</br>
+新規作成ページのファイルとなる`new.php`を作成する。</br>
+```php
+<?php
+
+$message = 'New note';
+require_once 'views/new.tpl.php'
+```
+続いてこのページに用いるテンプレートを作成する。
+```php
+// new.tpl.php
+<!DOCTYPE html>
+<html lang='ja'>
+<?php include('header.inc.php'); ?>
+
+<body>
+
+  <h1><?= $message ?></h1>
+
+  <form action='create.php' method='post'>
+    <label for='title'>タイトル</label><br>
+    <input type='text' name='title' value=''>
+    <p></p>
+    <label for='content'>本文</label><br>
+    <textarea name='content' cols='40' rows='10'></textarea>
+    <p></p>
+    <button type='submit'>作成する</button>
+  </form>
+  
+  <p><a href='index.php'>一覧に戻る</a></p>
+
+  <?php include('footer.inc.php'); ?>
+</body>
+
+</html>
+```
+</br>
+
+次にこのページのリンクをindexに設置する。
+```php
+// index.tpl.php 下記を追記
+  <p><a href='new.php'>新規メモ</a></p>
+```
+これでメモの新規作成ページが作成できた。</br>
+ただし、また作成したメモを保存するプログラムがないためこの状態で送信してもエラーになる。</br>
+</br>
+
+***
+
+### W5-7_
 
 
