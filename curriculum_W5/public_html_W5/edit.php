@@ -4,11 +4,9 @@ require_once 'db_connect.php';
 
 if(isset($_REQUEST['id'])){
   $id = $_REQUEST['id'];
-  $message = 'Show note #'. $id;
+  $message = 'Edit note #'. $id;
   $note = Note::find($id);
 }
 
-$my_html = Michelf\Markdown::defaultTransform($note->content);
-
-
-require_once 'views/show.tpl.php';
+// 下記を編集用のテンプレートに変更
+require_once 'views/edit.tpl.php';

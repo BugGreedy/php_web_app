@@ -10,6 +10,7 @@
 [W5-6_新規メモを作ろう](#W5-6_新規メモを作ろう)</br>
 [W5-7_新規メモを保存しよう](#W5-7_新規メモを保存しよう)</br>
 [W5-8_メモを編集しよう](#W5-8_メモを編集しよう)</br>
+[W5-9_編集したメモを保存しよう](#W5-9_編集したメモを保存しよう)</br>
 
 </br>
 
@@ -423,6 +424,85 @@ exit;
 ***
 
 ### W5-8_メモを編集しよう
-ここではメモの編集機能を作成する。
-画面の遷移はこんな感じ。
-![遷移画面イメージ](/img/memo-edit.png)
+ここではメモの編集機能を作成する。</br>
+編集用ページのファイル`edit.php`を作成する。
+```php
+// edit.php
+<?php
+
+require_once 'db_connect.php';
+
+if(isset($_REQUEST['id'])){
+  $id = $_REQUEST['id'];
+  $message = 'Edit note #'. $id;  // messageを変更
+  $note = Note::find($id);
+}
+
+// 下記を編集用のテンプレートに変更
+require_once 'views/edit.tpl.php';
+```
+</br>
+
+次にテンプレートを編集する。
+```php
+// edit.tpl.php
+<!DOCTYPE html>
+<html lang='ja'>
+<?php include('header.inc.php'); ?>
+
+<body>
+
+  <h1><?= $message ?></h1>
+
+  <form action='update.php' method='post'> 
+    <input type='hidden' name='id' value='<?= $note['id'] ?>'> // hedden(隠し要素)でidを送信する
+    <label for='title'>タイトル</label><br>
+    <input type='text' name='title' value='<?= $note['title'] ?>'> // フォームに既存の内容を入れる
+    <p></p>
+    <label for='content'>本文</label><br>
+    <textarea name='content' cols='40' rows='10'><?= $note['content'] ?></textarea> // フォームに既存の内容を入れる
+    <p></p>
+    <button type='submit'>保存する</button>
+  </form>
+  
+  <p><a href='index.php'>一覧に戻る</a></p>
+
+  <?php include('footer.inc.php'); ?>
+</body>
+
+</html>
+```
+</br>
+
+次に詳細ページからこの編集ページに飛べるようにリンクを設置する。
+```php
+// show.tpl.php メニューのリンクの箇所を下記のように編集
+  <p><a href='index.php'>一覧に戻る</a> | <a href='edit.php?id=<?= $note->id ?>'>編集</a> | <a href='destroy.php?id=<?= $note->id ?>'>削除</a></p>
+```
+</br>
+次にチャプターで編集を保存するプログラムを作成する。</br>
+</br>
+
+***
+
+### W5-9_編集したメモを保存しよう
+編集したメモを保存する`update.php`を作成する。
+```php
+// update.php
+<?php
+
+require_once 'db_connect.php';
+
+// 下記を追記 (これまで同様に指定のidを受け取ったらという条件を記述)
+if(isset($_REQUEST['id'])){
+  $id = $_REQUEST['id'];
+  $note = Note::find($id);
+  $note->title = $_REQUEST['title'];
+  $note->content = $_REQUEST['content'];
+  $note->save();
+}
+
+header('Location: show.php?id='.$note->id); 
+exit;
+```
+これでメモ帳アプリの開発デモは終了。
